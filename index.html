@@ -170,7 +170,12 @@
 
 	<footer class="footer">
 		<div class="container">
-			<p class="text-muted"><ui-view /></p>
+			<p class="text-muted">
+				<a ui-sref="home">Home</a> |
+				<a ui-sref="home.messages.inbox">Inbox</a> |
+				<a ui-sref="home.profile.edit">Edit Profile</a> |
+				<ui-view />
+			</p>
 		</div>
 	</footer>
 

@@ -6822,7 +6822,6 @@ body {
 }
 .header-bar-wrap {
   height: 60px;
-  padding: 50px 0;
 }
 .header-bar-wrap .header-items {
   list-style: none;
@@ -6844,6 +6843,15 @@ body {
   margin-right: 6px;
   color: #000;
   float: left;
+  /*&.left:before, &.left:after {
+			height: 100%;
+		  width: 100%;
+			-webkit-transform: none;
+		  -moz-transform: none;
+		  -ms-transform: none;
+		  -o-transform: none;
+			transform: none;
+		}*/
 }
 .header-bar-wrap .header-item:before {
   content: '';

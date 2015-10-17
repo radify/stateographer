@@ -48,68 +48,59 @@ angular.module('stateographer', ['ui.router']).config(function($stateProvider, $
 
   
   var states = $state.get();
-  var higherarchy = [];
-  // D3 code goes here
-
-
-var treeData = [
-  {
-    "name": "Top Level",
-    "parent": "null",
-    "children": [
+  var treeData = [
       {
-        "name": "Level 2: A",
-        "parent": "Top Level",
+        "name":"Top",
+        "parent":"null",
         "children": [
-          {
-            "name": "Son of A",
-            "parent": "Level 2: A"
-          },
-          {
-            "name": "Daughter of A",
-            "parent": "Level 2: A"
-          }
-        ]
-      },
-      {
-        "name": "Level 2: B",
-        "parent": "null",
-        "children" : [
-          {
-            "name": "BLAH",
-            "parent": "Level 2: B"
-          },
-          {
-            "name": "BLAH",
-            "parent": "Level 2: B"
-          },
-          {
-            "name": "BLAH",
-            "parent": "Level 2: B"
-          },
-          {
-            "name": "BLAH",
-            "parent": "Level 2: B"
-          },
-          {
-            "name": "BLAH",
-            "parent": "Level 2: B"
-          },
-          {
-            "name": "BLAH",
-            "parent": "Level 2: B",
-            "children": [
-              {
-            "name": "BLAH",
-            "parent": "Level 2: B"
-          },
-            ]
-          },
+
         ]
       }
-    ]
+
+
+  ];
+  // D3 code goes here
+
+  console.log(states);
+
+
+  function insert(parent, child){
+
+
+    for(var i = 0; i < parent.children.length; i++){
+      if (parent.children[i].name == child){
+        return parent.children[i];
+      }
+    }
+
+    var index = parent.children.push({
+      "name":child,
+      "parent":parent.name,
+      "children":[]
+    });
+
+    return parent.children[index-1];
+    
   }
-];
+
+
+
+  for(var i = 0; i< states.length; i++){
+
+    var state = states[i];
+    var names = state.name.split(".");
+
+    var parent = treeData[0];
+
+    for(var j = 0; j < names.length; j++){
+
+      parent = insert(parent, names[j]);
+
+
+    }
+  }
+
+console.log(JSON.stringify(treeData));
 
 
 // ************** Generate the tree diagram  *****************

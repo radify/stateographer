@@ -47,24 +47,22 @@ angular.module('stateographer', ['ui.router']).config(function($stateProvider, $
    */
 
   
-  var states = $state.get();
+  var states = $state.get().filter(function(state) { return !!state.name; });
+
   var treeData = [
       {
-        "name":"Top",
-        "parent":"null",
-        "children": [
-
-        ]
-      }
-
-
+        "name":"<root>",
+        "parent": null,
+        "children": []
+      },
+      
   ];
   // D3 code goes here
 
   console.log(states);
 
 
-  function insert(parent, child){
+  function insert(parent, child) {
 
 
     for(var i = 0; i < parent.children.length; i++){
@@ -100,7 +98,7 @@ angular.module('stateographer', ['ui.router']).config(function($stateProvider, $
     }
   }
 
-console.log(JSON.stringify(treeData));
+console.log(treeData);
 
 
 // ************** Generate the tree diagram  *****************
@@ -109,7 +107,7 @@ var margin = {top: 20, right: 120, bottom: 20, left: 120},
   height = 500 - margin.top - margin.bottom;
   
 var i = 0,
-  duration = 750,
+  duration = 250,
   root;
 
 var tree = d3.layout.tree()
@@ -152,16 +150,15 @@ function update(source) {
     .on("click", click);
 
   nodeEnter.append("rect")
-      .attr("x", function(d) { return d.children || d._children ? -70 : 13; })
-      .attr("y", -10)
+    .attr({ "x": -70, "y": -10, "rx": 10, "ry": 10 })
     .attr("height", 20)
     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
     .attr('width', 0);
 
   nodeEnter.append("text")
-    .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+    .attr("x", -20)
     .attr("dy", ".35em")
-    .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+    .attr("text-anchor", "middle")
     .text(function(d) { return d.name; })
     .style("fill-opacity", 1e-6);
 
@@ -185,7 +182,7 @@ function update(source) {
     .remove();
 
   nodeExit.select("rect")
-      .duration(duration-20)
+    .duration(duration-20)
     .attr("width", 0);
 
   nodeExit.select("text")
@@ -199,8 +196,8 @@ function update(source) {
   link.enter().insert("path", "g")
     .attr("class", "link")
     .attr("d", function(d) {
-    var o = {x: source.x0, y: source.y0};
-    return diagonal({source: o, target: o});
+      var o = { x: source.x0, y: source.y0 };
+      return diagonal({source: o, target: o});
     });
 
   // Transition links to their new position.
@@ -227,11 +224,11 @@ function update(source) {
 // Toggle children on click.
 function click(d) {
   if (d.children) {
-  d._children = d.children;
-  d.children = null;
+    d._children = d.children;
+    d.children = null;
   } else {
-  d.children = d._children;
-  d._children = null;
+    d.children = d._children;
+    d._children = null;
   }
   update(d);
 }

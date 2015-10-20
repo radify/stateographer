@@ -32,7 +32,7 @@ angular.module('stateographer', ['ui.router']).config(function($stateProvider, $
     url: '/inbox',
     template: 'Inbox &gt; <ui-view></ui-view>'
   }).state('home.messages.inbox.view', {
-    url: '/view',
+    url: '/view/:message',
     template: 'View'
   }).state('home.messages.new', {
     url: '/new',
@@ -234,12 +234,11 @@ function click(d) {
 }
 
 
+}).controller('HistoryController', function($scope, $rootScope, $state) {
+  $scope.history = [$state.current];
 
-
-  $rootScope.$on('$stateChangeSuccess', function(toState) {
-    /**
-     * Capture state changes here, push to history
-     */
-    console.log({ to: toState });
+  $rootScope.$on('$stateChangeSuccess', function(e, toState, toParams) {
+    $scope.history.push(toState);
   });
+
 });

@@ -39,14 +39,12 @@
 
 	<div class="container">
 
-		<div class="header-bar-wrap">
+		<div class="header-bar-wrap" ng-controller="HistoryController">
 
-			<div class="header-item left">
-					<a href="#">Test 1</a>
-			</div>
-
-			<div class="header-item">
-					<a href="#">Test 2</a>
+			<div ng-repeat="state in history track by $index">
+				<div class="header-item left">
+						<a href="#">{{ state.name || '&lt;root&gt;' }}</a>
+				</div>
 			</div>
 
 			<div class="header-item dropdown">
@@ -63,8 +61,6 @@
 						<li><a href="#">One more separated link</a></li>
 					</ul>
 			</div>
-
-
 
 		</div>
 
@@ -193,7 +189,8 @@
 		<div class="container">
 			<p class="text-muted">
 				<a ui-sref="home">Home</a> |
-				<a ui-sref="home.messages.inbox">Inbox</a> |
+				<a ui-sref="home.messages.inbox.view({ message: 5 })">Message 5</a> |
+				<a ui-sref="home.messages.inbox.view({ message: 10 })">Message 10</a> |
 				<a ui-sref="home.profile.edit">Edit Profile</a> |
 				<ui-view />
 			</p>

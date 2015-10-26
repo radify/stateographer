@@ -1,4 +1,4 @@
-angular.module('stateographer', ['ui.router']).config(function($stateProvider, $urlRouterProvider) {
+angular.module('stateographer', ['ui.router', 'ui.bootstrap']).config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 
   /**
@@ -236,9 +236,23 @@ function click(d) {
 
 }).controller('HistoryController', function($scope, $rootScope, $state) {
   $scope.history = [$state.current];
+  $scope.newState = function  (toState, toParams) {
+    if($scope.history[$scope.history.length - 1] == toState){
+      $scope.params = toParams;
+    }
+    else{
+      $scope.history.push(toState);
+      $scope.params = null;
+    }
+  };
 
   $rootScope.$on('$stateChangeSuccess', function(e, toState, toParams) {
-    $scope.history.push(toState);
+    $scope.newState(toState, toParams);
   });
+
+  $scope.doShow = function(){
+    if($scope.params === null){return false;}
+    return true;
+  };
 
 });

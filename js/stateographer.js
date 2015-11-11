@@ -235,14 +235,16 @@ function click(d) {
 
 
 }).controller('HistoryController', function($scope, $rootScope, $state) {
-  $scope.history = [$state.current];
+  //$scope.history = [{state:$state.current, params:[]}];
+  $scope.history = [];
+  var history = $scope.history;
+
   $scope.newState = function  (toState, toParams) {
-    if($scope.history[$scope.history.length - 1] == toState){
-      $scope.params = toParams;
+    if(last(history) && last(history).state == toState){
+      last(history).params.push(toParams);
     }
     else{
-      $scope.history.push(toState);
-      $scope.params = null;
+      $scope.history.push({state:toState, params:[toParams]});
     }
   };
 
@@ -251,8 +253,15 @@ function click(d) {
   });
 
   $scope.doShow = function(){
-    if($scope.params === null){return false;}
-    return true;
+    return (last(history) && last(history).params.length > 1);
   };
+
+  $scope.last = function(lst){
+    if(lst.length){
+      return lst[lst.length-1];
+    }
+  };
+
+  var last = $scope.last;
 
 });

@@ -59,8 +59,6 @@ angular.module('stateographer', ['ui.router', 'ui.bootstrap']).config(function($
   ];
   // D3 code goes here
 
-  console.log(states);
-
 
   function insert(parent, child) {
 
@@ -98,8 +96,31 @@ angular.module('stateographer', ['ui.router', 'ui.bootstrap']).config(function($
     }
   }
 
-console.log(treeData);
+function sliceFirst(str){
+  return str.substring(1, str.length);
+}
 
+function nodeToName(theNode){
+
+  function nodeToNameHelper(node){
+  if(node.parent){
+    return nodeToNameHelper(node.parent) + "." + node.name;
+  }
+  else{
+    return "";
+  }
+}
+
+  return sliceFirst(nodeToNameHelper(theNode));
+}
+
+function doesContain(node, name){
+
+    console.log("compairing " + nodeToName(node) + " to " + name + " and got " + (name.indexOf(nodeToName(node)) >= 0));
+
+    return (name.indexOf(nodeToName(node)) >= 0);
+  
+}
 
 // ************** Generate the tree diagram  *****************
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
@@ -168,9 +189,17 @@ function update(source) {
     .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
     .attr("width", 100);
 
+$rootScope.redraw = function(theStateName){
+
+  console.log("redrawing tree");
+
   nodeUpdate.select("rect")
     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
-    .attr('width', 100);
+    .attr('width', 100)
+    .style("stroke", function(d){return (doesContain(d, theStateName) ? "steelblue" : "#000");});
+  };
+
+  $rootScope.redraw($state.current.name);
 
   nodeUpdate.select("text")
     .style("fill-opacity", 1);
@@ -246,10 +275,13 @@ function click(d) {
     else{
       $scope.history.push({state:toState, params:[toParams]});
     }
+
+    $scope.redraw(toState.name);
   };
 
   $rootScope.$on('$stateChangeSuccess', function(e, toState, toParams) {
     $scope.newState(toState, toParams);
+    
   });
 
   $scope.doShow = function(){

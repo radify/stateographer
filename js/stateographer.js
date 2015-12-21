@@ -193,8 +193,13 @@ $rootScope.redraw = function(theStateName){
 
   console.log("redrawing tree");
 
+  var nodeUpdate = node.transition()
+    .duration(duration)
+    .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+    .attr("width", 100);
+
   nodeUpdate.select("rect")
-    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+    .style("fill", function(d) {return (d._children ? "lightsteelblue" : "#fff");})
     .attr('width', 100)
     .style("stroke", function(d){return (doesContain(d, theStateName) ? "steelblue" : "#000");});
   };
@@ -268,6 +273,9 @@ function click(d) {
   $scope.history = [];
   var history = $scope.history;
 
+  $scope.floatDirectionEnabled = false;
+
+
   $scope.newState = function  (toState, toParams) {
     if(last(history) && last(history).state == toState){
       last(history).params.push(toParams);
@@ -292,6 +300,11 @@ function click(d) {
     if(lst.length){
       return lst[lst.length-1];
     }
+  };
+
+  $scope.floatDirection = function(entry){
+
+    return (entry == last(history) && $scope.floatDirectionEnabled) ? "right" : "left";
   };
 
   var last = $scope.last;

@@ -45,7 +45,7 @@
 		<div class="header-bar-wrap" ng-controller="HistoryController">
 
 			<div ng-repeat="entry in history track by $index">
-				<div class="header-item left" ng-if="entry.params.length < 2">
+				<div class="header-item left" style="float:{{ floatDirection(entry) }}"ng-if="entry.params.length < 2">
 						<a href="#">{{ entry.state.name || '&lt;root&gt;' }}</a>
 				</div>
 

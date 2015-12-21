@@ -195,7 +195,7 @@ $rootScope.redraw = function(theStateName){
 
   var nodeUpdate = node.transition()
     .duration(duration)
-    .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+    .attr("transform", function(d) { return "translate(" + d.y + "," + (doesContain(d, theStateName) ?  root.x0 : d.x )+ ")"; })
     .attr("width", 100);
 
   nodeUpdate.select("rect")
